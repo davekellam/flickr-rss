@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: flickrRSS
-Plugin URI: http://eightface.com/wordpress/flickrrss/
-Description: Allows you to integrate the photos from a flickr rss feed into your site.
-Version: 5.1
+Plugin URI: http://wordpress.org/extend/plugins/flickr-rss/
+Description: Allows you to integrate the photos from a Flickr RSS feed into your site.
+Version: 5.2
 License: GPL
-Author: Dave Kellam and Stefano Verna
+Author: Dave Kellam
 Author URI: http://eightface.com
 */
 
@@ -13,12 +13,12 @@ if (!class_exists('flickrRSS')) {
 	class flickrRSS {
 	
 		function flickrRSS() {
-			$this->version = "5.1";
+			$this->version = "5.2";
 		}
 	
-		function setupActivation() {
+		function get_and_delete_option($setting) { $v = get_option($setting); delete_option($setting); return $v; }
 		
-			function get_and_delete_option($setting) { $v = get_option($setting); delete_option($setting); return $v; }
+		function setupActivation() {
 		
 			// check for previously installed version 4.0 or older
 			if (get_option('flickrRSS_flickrid')) {
@@ -175,7 +175,7 @@ if (!class_exists('flickrRSS')) {
 							strpos($settings['html'], "%image_".$size."%")
 					) {
 						$img_to_cache = $thumbnail;
-						preg_match('<http://farm[0-9]{0,3}\.static.flickr\.com/\d+?\/([^.]*)\.jpg>', $img_to_cache, $flickrSlugMatches);
+						preg_match('<http://farm[0-9]{0,3}\.static.?flickr\.com/\d+?\/([^.]*)\.jpg>', $img_to_cache, $flickrSlugMatches);
 						$flickrSlug = $flickrSlugMatches[1];
 						if (!file_exists("$fullPath$flickrSlug.jpg") ) {   
 							$localimage = fopen("$fullPath$flickrSlug.jpg", 'wb');
@@ -217,8 +217,8 @@ if (!class_exists('flickrRSS')) {
 				'<p>To control the other settings, please visit the <a href="'.$settingspage.'">flickrRSS Settings page</a>.</p>'.
 				'<input type="hidden" id="flickrRSS-submit" name="flickrRSS-submit" value="1" />';
 			}
-			wp_register_sidebar_widget('flickrRSS', 'widget_flickrRSS');
-			wp_register_widget_control('flickrRSS', 'widget_flickrRSS_control');
+			wp_register_sidebar_widget('flickrRSS', 'flickrRSS', 'widget_flickrRSS');
+			wp_register_widget_control('flickrRSS', 'widget_flickrRSS_control', 'widget_flickrRSS_control');
 		}
 	
 		function setupSettingsPage() {

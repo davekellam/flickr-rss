@@ -1,8 +1,8 @@
 === flickrRSS ===
-Contributors: eightface
+Contributors: eightface, stefano.verna
 Tags: flickr, photos, images, sidebar, widget, rss
-Requires at least: 2.6
-Tested up to: 2.8
+Requires at least: 3.0
+Tested up to: 3.2.1
 Stable tag: 5.1
 
 Allows you to integrate Flickr photos into your site. It supports user, set, favorite, group and community photostreams.
@@ -25,31 +25,27 @@ This plugin allows you to easily display Flickr photos on your site. It supports
 == Frequently Asked Questions ==
 
 = Can I get random images from my stream? =
-No, it's a limitation of using the RSS feed (it only contains the most recent photos)	
+No, it's a limitation of using the RSS feed (it only contains the most recent photos). Other people have produced API based version of the plugin, try searching for them.	
 
 = How do I refresh the photos manually? =
-Good question. The plugin uses built-in WordPress functions to update the feed, I haven't figured out how to force an update.
+No. The plugin uses built-in WordPress functions to update the feed.
 
 = When I use multiple tags, why does nothing shows up? =
 The feed will only pull in photos that have both tags, not one or the other.
 
 = When I enable cache, why do just a bunch of random characters show up? =
-You've probably specified the full path wrong. Double check with your host to make sure you've got it right. If you're still having troulbes, check the forum.
-
-= How do a I get borders between photos? =
-You need to edit your CSS file. There are plenty of tutorials online, you may find some help in the forum.
+You've probably specified the full path wrong. Double check with your host to make sure you've got it right. If you're still having troubles, check the forum.
 
 = Why aren't any photos showing up? =
 Sometimes it can take a little while to kick in, have patience. Flickr may possibly have been down. Also, make sure it works without the cache first.
 
 = Will it work with video? =
-Yes, videos will be displayed as a thumbnail image. You'll need to click through to flickr to play it though.
+Yes and no, videos will be displayed as a thumbnail image. You'll need to click through to flickr to play it though.
 
 
 == Feedback and Support ==
 
-Visit the [flickrRSS forum](http://groups.google.com/group/flickrrss/) for help getting the plugin working and styling the photos. I'll do my best to respond, but sometimes I'm slow.
-
+I don't use the plugin anymore and don't really support it. If you're having issues, you could try visiting the [WordPress forums](http://wordpress.org/tags/flickr-rss?forum_id=10) or the old [Google group](http://groups.google.com/group/flickrrss/).
 
 == Advanced ==
 
@@ -84,10 +80,11 @@ This would show the 20 most recent thumbnail sized photos from the specified use
 
 == Plugin History ==
 
-**Latest Release:** April 29, 2009
+**Latest Release:** December 8, 2011
 
+* 5.2 - Fixed image cache server name change, also had a nested function for some reason which was messing up multiple instances for people
 * 5.1 - Minor interface tweaks to avoid confusion
-* 5.0 - Added more customization of presentation logic, separated core code from display, improved paramter system, many other changes
+* 5.0 - Added more customization of presentation logic, separated core code from display, improved paramter system, many other changes, thanks to Stefano Verna for major code updates.
 * 4.0 - New interface for WP 2.5, support for sets and favorites, a few widget tweaks, some cleanup in the source
 * 3.5 - Co-released with 4.0, bringing support for sets and favorites to WP 2.3
 * 3.2.1 - Minor interface tweaks to avoid confusion

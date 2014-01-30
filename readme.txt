@@ -1,9 +1,9 @@
 === flickrRSS ===
-Contributors: eightface, stefano.verna
-Tags: flickr, photos, images, sidebar, widget, rss
-Requires at least: 3.0
-Tested up to: 3.2.1
-Stable tag: 5.1
+Contributors: eightface
+Tags: flickr, photos, images, sidebar, widget
+Requires at least: 3.5
+Tested up to: 3.8.1
+Stable tag: 6.0
 
 Allows you to integrate Flickr photos into your site. It supports user, set, favorite, group and community photostreams.
 
@@ -80,8 +80,9 @@ This would show the 20 most recent thumbnail sized photos from the specified use
 
 == Plugin History ==
 
-**Latest Release:** December 8, 2011
+**Latest Release:** January 30, 2014
 
+* 6.0 - Primary development on GitHub, see repo there for details. Removing old functionality and revamping plugin.
 * 5.2 - Fixed image cache server name change, also had a nested function for some reason which was messing up multiple instances for people
 * 5.1 - Minor interface tweaks to avoid confusion
 * 5.0 - Added more customization of presentation logic, separated core code from display, improved paramter system, many other changes, thanks to Stefano Verna for major code updates.

@@ -108,13 +108,8 @@ if (!class_exists('flickrRSS')) {
 			return $settings;
 		}
 	
-		function getRSS($settings) {
-			if (!function_exists('MagpieRSS')) { 
-				// Check if another plugin is using RSS, may not work
-				include_once (ABSPATH . WPINC . '/rss.php');
-				error_reporting(E_ERROR);
-			}
-			// get the feeds
+		function getRSS( $settings ) {
+			// Construct feed URL
 			if ($settings['type'] == "user") { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200'; }
 			elseif ($settings['type'] == "favorite") { $rss_url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200'; }
 			elseif ($settings['type'] == "set") { $rss_url = 'http://api.flickr.com/services/feeds/photoset.gne?set=' . $settings['set'] . '&nsid=' . $settings['id'] . '&format=rss_200'; }
@@ -124,8 +119,8 @@ if (!class_exists('flickrRSS')) {
 				print '<strong>No "type" parameter has been setup. Check your flickrRSS Settings page, or provide the parameter as an argument.</strong>';
 				die();
 			}
-			# get rss file
-			return @fetch_rss($rss_url);
+			// Retrieve feed
+			return fetch_feed( $rss_url );
 		}
 	
 		function printGallery($settings = array()) {

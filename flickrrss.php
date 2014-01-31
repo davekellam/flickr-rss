@@ -10,11 +10,8 @@ Author URI: http://eightface.com
 */
 
 if ( ! class_exists( 'flickrRSS' ) ) {
+
 	class flickrRSS {
-		
-		function setupActivation() {
-		
-		}
 	
 		function fixArguments( $args ) {
 			$settings = array();
@@ -215,7 +212,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 }
 $flickrRSS = new flickrRSS();
 add_action( 'admin_menu', array(&$flickrRSS, 'setupSettingsPage') );
-add_action( 'plugins_loaded', array(&$flickrRSS, 'setupWidget') );
+add_action( 'plugins_loaded', array(&$flickrRSS, 'setupWidget') )
 
 /**
  * Main function to call flickrRSS in your templates

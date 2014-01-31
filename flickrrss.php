@@ -184,35 +184,46 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 		}
 	
 		function setupSettingsPage() {
-			if (function_exists( 'add_options_page') ) {
+			if ( function_exists( 'add_options_page') ) {
 				add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'flickrrss-settingspage.php', array( &$this, 'printSettingsPage' ) );
 			}
 		}
 	
 		function printSettingsPage() {
+			
 			$settings = $this->getSettings();
-			if (isset($_POST['save_flickrRSS_settings'])) {
-				foreach ($settings as $name => $value) {
+
+			if ( isset( $_POST['save_flickrRSS_settings'] ) ) {
+				
+				foreach ( $settings as $name => $value ) {
 					$settings[$name] = $_POST['flickrRSS_'.$name];
 				}
+
 				$settings['cache_sizes'] = array();
-				foreach (array("small", "square", "thumbnail", "medium", "large") as $size) {
+				
+				foreach ( array("small", "square", "thumbnail", "medium", "large") as $size ) {
 					if ($_POST['flickrRSS_cache_'.$size]) $settings['cache_sizes'][] = $size;
 				}
-				update_option('flickrRSS_settings', $settings);
+				
+				update_option( 'flickrRSS_settings', $settings );
+				
 				echo '<div class="updated"><p>flickrRSS settings saved!</p></div>';
 			}
-			if (isset($_POST['reset_flickrRSS_settings'])) {
-				delete_option('flickrRSS_settings');
+
+			if ( isset( $_POST['reset_flickrRSS_settings'] ) ) {
+				delete_option( 'flickrRSS_settings' );
 				echo '<div class="updated"><p>flickrRSS settings restored to default!</p></div>';
 			}
-			include ("flickrrss-settingspage.php");
+
+			// add setting page 
+			include ( 'flickrrss-settingspage.php' );
+
 		}
 	}
 }
 $flickrRSS = new flickrRSS();
-add_action( 'admin_menu', array(&$flickrRSS, 'setupSettingsPage') );
-add_action( 'plugins_loaded', array(&$flickrRSS, 'setupWidget') )
+add_action( 'admin_menu', array( &$flickrRSS, 'setupSettingsPage' ) );
+add_action( 'plugins_loaded', array( &$flickrRSS, 'setupWidget' ) );
 
 /**
  * Main function to call flickrRSS in your templates

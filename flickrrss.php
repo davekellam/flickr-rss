@@ -3,7 +3,7 @@
 Plugin Name: flickrRSS
 Plugin URI: http://wordpress.org/extend/plugins/flickr-rss/
 Description: Allows you to integrate the photos from a Flickr RSS feed into your site.
-Version: 5.2
+Version: 6.0
 License: GPL
 Author: Dave Kellam
 Author URI: http://eightface.com
@@ -13,31 +13,10 @@ if (!class_exists('flickrRSS')) {
 	class flickrRSS {
 	
 		function flickrRSS() {
-			$this->version = "5.2";
+			$this->version = "6.0";
 		}
-	
-		function get_and_delete_option($setting) { $v = get_option($setting); delete_option($setting); return $v; }
 		
 		function setupActivation() {
-		
-			// check for previously installed version 4.0 or older
-			if (get_option('flickrRSS_flickrid')) {
-				// let's port previous settings and delete them
-				$settings = $this->fixArguments(array(
-					get_and_delete_option('flickrRSS_display_numitems'),
-					get_and_delete_option('flickrRSS_display_type'),
-					get_and_delete_option('flickrRSS_tags'),
-					get_and_delete_option('flickrRSS_display_imagesize'),
-					get_and_delete_option('flickrRSS_before'),
-					get_and_delete_option('flickrRSS_after'),
-					get_and_delete_option('flickrRSS_flickrid'),
-					get_and_delete_option('flickrRSS_set'),
-					get_and_delete_option('flickrRSS_use_image_cache'),
-					get_and_delete_option('flickrRSS_image_cache_uri'),
-					get_and_delete_option('flickrRSS_image_cache_dest')
-				));
-				update_option('flickrRSS_settings', $settings);
-			}
 		
 			// update version number
 			if (get_option('flickrRSS_version') != $this->version)

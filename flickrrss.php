@@ -196,8 +196,8 @@ if (!class_exists('flickrRSS')) {
 		}
 	
 		function setupSettingsPage() {
-			if (function_exists('add_options_page')) {
-				add_options_page('flickrRSS Settings', 'flickrRSS', 8, basename(__FILE__), array(&$this, 'printSettingsPage'));
+			if (function_exists( 'add_options_page') ) {
+				add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'flickrrss-settingspage.php', 'printSettingsPage' );
 			}
 		}
 	

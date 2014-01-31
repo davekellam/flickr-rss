@@ -11,16 +11,9 @@ Author URI: http://eightface.com
 
 if ( ! class_exists( 'flickrRSS' ) ) {
 	class flickrRSS {
-	
-		function flickrRSS() {
-			$this->version = "6.0";
-		}
 		
 		function setupActivation() {
 		
-			// update version number
-			if ( get_option( 'flickrRSS_version') != $this->version )
-				update_option(' flickrRSS_version', $this->version );
 		}
 	
 		function fixArguments( $args ) {
@@ -45,8 +38,6 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 		}
 	
 		function getSettings() {
-			
-			if (!get_option('flickrRSS_settings')) $this->setupActivation();
 			
 			$settings = array(
 				/*== Content params ==*/
@@ -225,7 +216,6 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 $flickrRSS = new flickrRSS();
 add_action( 'admin_menu', array(&$flickrRSS, 'setupSettingsPage') );
 add_action( 'plugins_loaded', array(&$flickrRSS, 'setupWidget') );
-register_activation_hook( __FILE__, array( &$flickrRSS, 'setupActivation' ));
 
 /**
  * Main function to call flickrRSS in your templates

@@ -227,13 +227,15 @@ add_action( 'admin_menu', array(&$flickrRSS, 'setupSettingsPage') );
 add_action( 'plugins_loaded', array(&$flickrRSS, 'setupWidget') );
 register_activation_hook( __FILE__, array( &$flickrRSS, 'setupActivation' ));
 
-function get_flickrRSS($settings = array()) {
+/**
+ * Main function to call flickrRSS in your templates
+ */
+function get_flickrRSS( $settings = array() ) {
 	global $flickrRSS;
-	if (func_num_args() > 1 ) {
-		$old_array = func_get_args();
-		$flickrRSS->printGallery($flickrRSS->fixArguments($old_array));
-	}
-	else $flickrRSS->printGallery($settings);
-}
 
-?>
+	if ( func_num_args() > 1 ) {
+		$old_array = func_get_args();
+		$flickrRSS->printGallery( $flickrRSS->fixArguments( $old_array ) );
+	}
+	else $flickrRSS->printGallery( $settings );
+}

@@ -90,17 +90,22 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			return fetch_feed( $rss_url );
 		}
 	
-		function printGallery($settings = array()) {
+		function printGallery( $settings ) {
 		
-			if (!is_array($settings)) {
-				$settings = $this->fixArguments(func_get_args());
+			if ( ! is_array( $settings ) ) {
+				return; // probably need better error stuff here
 			}
 		
-			$settings = array_merge($this->getSettings(), $settings);
-			if (!($rss = $this->getRSS($settings))) return;
+			$settings = array_merge( $this->getSettings(), $settings );
+
+			if ( ! ( $rss = $this->getRSS( $settings ) ) ) return;
+
 			# specifies number of pictures
-			$items = array_slice($rss->items, 0, $settings['num_items']);
-			echo stripslashes($settings['before_list']);
+			var_dump( $items );
+			$items = array_slice( $rss->items, 0, $settings['num_items'] );
+
+			echo stripslashes( $settings['before_list'] );
+
 			# builds html from array
 			foreach ( $items as $item ) {
 				if(!preg_match('<img src="([^"]*)" [^/]*/>', $item['description'], $imgUrlMatches)) {
@@ -216,7 +221,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			}
 
 			// add setting page 
-			include ( 'admin.php' );
+			include ( 'flickrrss-admin.php' );
 
 		}
 	}

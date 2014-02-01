@@ -216,7 +216,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			}
 
 			// add setting page 
-			include ( 'flickrrss-settingspage.php' );
+			include ( 'admin.php' );
 
 		}
 	}

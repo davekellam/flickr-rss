@@ -98,17 +98,28 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 		
 			$settings = array_merge( $this->getSettings(), $settings );
 
-			if ( ! ( $rss = $this->getRSS( $settings ) ) ) return;
+			// fetch RSS feed
+			$rss = $this->getRSS( $settings );
 
-			# specifies number of pictures
-			var_dump( $items );
-			$items = array_slice( $rss->items, 0, $settings['num_items'] );
+			// specifies number of pictures
+			$num_items = $settings['num_items'];
 
+			if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
+ 
+				$maxitems = $rss->get_item_quantity( $num_items ); 
+
+				// Build an array of all the items, starting with element 0 (first element).
+			 	$items = $rss->get_items( 0, $maxitems );
+
+			endif;
+
+			// TODO: Construct object for output rather than echoing and store in transient
 			echo stripslashes( $settings['before_list'] );
 
 			# builds html from array
 			foreach ( $items as $item ) {
-				if(!preg_match('<img src="([^"]*)" [^/]*/>', $item['description'], $imgUrlMatches)) {
+			
+				if(!preg_match('<img src="([^"]*)" [^/]*/>', $item->get_description(), $imgUrlMatches)) {
 					continue;
 				}
 				$baseurl = str_replace("_m.jpg", "", $imgUrlMatches[1]);
@@ -120,11 +131,11 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 					'large' => $baseurl . "_b.jpg"
 				);
 				#check if there is an image title (for html validation purposes)
-				if($item['title'] !== "") 
-					$title = htmlspecialchars(stripslashes($item['title']));
+				if( $item->get_title() !== '' ) 
+					$title = htmlspecialchars(stripslashes( $item->get_title() ) );
 				else 
 					$title = $settings['default_title'];
-				$url = $item['link'];
+				$url = $item->get_permalink();
 				$toprint = stripslashes($settings['html']);
 				$toprint = str_replace("%flickr_page%", $url, $toprint);
 				$toprint = str_replace("%title%", $title, $toprint);
@@ -190,7 +201,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 	
 		function setupSettingsPage() {
 			if ( function_exists( 'add_options_page') ) {
-				add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'admin.php', array( &$this, 'printSettingsPage' ) );
+				add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'flickrrss-admin.php', array( &$this, 'printSettingsPage' ) );
 			}
 		}
 	
@@ -233,7 +244,7 @@ add_action( 'plugins_loaded', array( &$flickrRSS, 'setupWidget' ) );
 /**
  * Main function to call flickrRSS in your templates
  */
-function get_flickrRSS( $settings = array() ) {
+function get_flickrRSS( $settings ) {
 	global $flickrRSS;
 
 	if ( func_num_args() > 1 ) {

@@ -13,7 +13,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 
 	class flickrRSS {
 		
-		function getSettings() {
+		function get_settings() {
 			
 			$settings = array(
 				/*== Content params ==*/
@@ -54,7 +54,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			return $settings;
 		}
 	
-		function getRSS( $settings ) {
+		function get_rss( $settings ) {
 			// Construct feed URL
 			if ($settings['type'] == "user") { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200'; }
 			elseif ($settings['type'] == "favorite") { $rss_url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200'; }
@@ -69,16 +69,16 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			return fetch_feed( $rss_url );
 		}
 	
-		function printGallery( $settings ) {
+		function print_gallery( $settings ) {
 		
 			if ( ! is_array( $settings ) ) {
 				return; // probably need better error stuff here
 			}
 		
-			$settings = array_merge( $this->getSettings(), $settings );
+			$settings = array_merge( $this->get_settings(), $settings );
 
 			// fetch RSS feed
-			$rss = $this->getRSS( $settings );
+			$rss = $this->get_rss( $settings );
 
 			// specifies number of pictures
 			$num_items = $settings['num_items'];
@@ -151,7 +151,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			echo stripslashes($settings['after_list']);
 		}
 	
-		function setupWidget() {
+		function create_widget() {
 			if (!function_exists('wp_register_sidebar_widget')) return;
 			function widget_flickrRSS($args) {
 				extract($args);
@@ -178,15 +178,15 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			wp_register_widget_control('flickrRSS', 'widget_flickrRSS_control', 'widget_flickrRSS_control');
 		}
 	
-		function setupSettingsPage() {
+		function add_settings_page() {
 			if ( function_exists( 'add_options_page') ) {
-				add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'flickrrss-admin.php', array( &$this, 'printSettingsPage' ) );
+				add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'flickrrss-admin.php', array( &$this, 'create_settings_page' ) );
 			}
 		}
 	
-		function printSettingsPage() {
+		function create_settings_page() {
 			
-			$settings = $this->getSettings();
+			$settings = $this->get_settings();
 
 			if ( isset( $_POST['save_flickrRSS_settings'] ) ) {
 				
@@ -217,8 +217,8 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 	}
 }
 $flickrRSS = new flickrRSS();
-add_action( 'admin_menu', array( &$flickrRSS, 'setupSettingsPage' ) );
-add_action( 'plugins_loaded', array( &$flickrRSS, 'setupWidget' ) );
+add_action( 'admin_menu', array( &$flickrRSS, 'add_settings_page' ) );
+add_action( 'plugins_loaded', array( &$flickrRSS, 'create_widget' ) );
 
 /**
  * Main function to call flickrRSS in your templates
@@ -226,5 +226,5 @@ add_action( 'plugins_loaded', array( &$flickrRSS, 'setupWidget' ) );
 function get_flickrRSS( $settings ) {
 	global $flickrRSS;
 
-	$flickrRSS->printGallery( $settings );
+	$flickrRSS->print_gallery( $settings );
 }

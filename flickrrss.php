@@ -25,14 +25,6 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 				'set' => '',
 				// Optional: Your Group or User ID. To be used when type = 'user' or 'group'
 				'id' => '',
-				// Do you want caching?
-				'do_cache' => false,
-				// The image sizes to cache locally. Possible values: 'square', 'thumbnail', 'small', 'medium' or 'large', provided within an array
-				'cache_sizes' => array('square'),
-				// Where images are saved (Server path)
-				'cache_path' => '',
-				// The URI associated to the cache path (web address)
-				'cache_uri' => '',
 			
 				/*== Presentational params ==*/
 				 // The number of thumbnails you want
@@ -119,32 +111,8 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 				$toprint = str_replace("%flickr_page%", $url, $toprint);
 				$toprint = str_replace("%title%", $title, $toprint);
 			
-				$cachePath = trailingslashit($settings['cache_uri']);
-				$fullPath = trailingslashit($settings['cache_path']);
-			
 				foreach ($thumbnails as $size => $thumbnail) {
-					if (
-							is_array($settings['cache_sizes']) && 
-							in_array($size, $settings['cache_sizes']) && 
-							$settings['do_cache'] == "true" && 
-							$cachePath && 
-							$fullPath && 
-							strpos($settings['html'], "%image_".$size."%")
-					) {
-						$img_to_cache = $thumbnail;
-						preg_match('<http://farm[0-9]{0,3}\.static.?flickr\.com/\d+?\/([^.]*)\.jpg>', $img_to_cache, $flickrSlugMatches);
-						$flickrSlug = $flickrSlugMatches[1];
-						if (!file_exists("$fullPath$flickrSlug.jpg") ) {   
-							$localimage = fopen("$fullPath$flickrSlug.jpg", 'wb');
-							$remoteimage = wp_remote_fopen($img_to_cache);
-							$iscached = fwrite($localimage,$remoteimage);
-							fclose($localimage);
-						} else {
-							$iscached = true;
-						}
-						if($iscached) $thumbnail = "$cachePath$flickrSlug.jpg";
-					}
-					$toprint = str_replace("%image_".$size."%", $thumbnail, $toprint);
+					$toprint = str_replace( "%image_" . $size . "%" , $thumbnail, $toprint );
 				}
 				echo $toprint;
 			}

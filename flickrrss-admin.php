@@ -1,4 +1,4 @@
-<div class="wrap">
+	<div class="wrap">
 	<h2>flickrRSS Settings</h2>
 
 	<form method="post">
@@ -72,38 +72,6 @@
 			</tr>
 		</table>
 
-		<h3>Cache Settings</h3>
-		<p>This allows you to store the images on your server and reduce the load on Flickr. Make sure the plugin works without the cache enabled first. If you're still having
-			trouble, try visiting the <a href="http://groups.google.com/group/flickrrss/">flickrRSS forum</a> for help.</p>
-		<table class="form-table">
-			<tr valign="top">
-				<th scope="row" colspan="2" class="th-full">
-				<input name="flickrRSS_do_cache" type="checkbox" id="flickrRSS_do_cache" value="true" <?php if ($settings['do_cache'] == 'true') { echo 'checked="checked"'; } ?> />  
-				<label for="use_image_cache">Enable the image cache</label></th>
-			</tr>
-			<tr valign="top" class="cachesettings">
-				<th scope="row">Image sizes to cache</th>
-				<td>
-					<?php
-						foreach (array("small", "square", "thumbnail", "medium", "large") as $size) {
-							echo '<input type="checkbox" name="flickrRSS_cache_'.$size.'" id="cache_'.$size.'" value="1"';
-							if (is_array($settings['cache_sizes']) && in_array($size, $settings['cache_sizes'])) echo ' checked="checked" ';
-							echo ' /> '.ucfirst($size).'<br/>';
-						} 
-					?>
-				</td>
-			</tr>
-			<tr valign="top" class="cachesettings">
-				<th scope="row">URL</th>
-				<td><input name="flickrRSS_cache_uri" type="text" id="flickrRSS_cache_uri" value="<?php echo $settings['cache_uri']; ?>" size="50" /><br/>
-					Could be <code><?php echo trailingslashit(get_option('siteurl')); ?>wp-content/cache/</code> ?</td>
-			</tr>
-			<tr valign="top" class="cachesettings">
-				<th scope="row">Full Path</th>
-				<td><input name="flickrRSS_cache_path" type="text" id="flickrRSS_cache_path" value="<?php echo $settings['cache_path']; ?>" size="50" /><br/>
-					Could be <code><?php echo trailingslashit(realpath("../wp-content/cache")); ?></code> ?</td>
-			</tr>
-		</table>
 		<div class="submit">
 			<input type="submit" name="reset_flickrRSS_settings" value="<?php _e('Reset') ?>" />
 			<input type="submit" name="save_flickrRSS_settings" value="<?php _e('Save Settings') ?>" class="button-primary" />

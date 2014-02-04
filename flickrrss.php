@@ -12,28 +12,7 @@ Author URI: http://eightface.com
 if ( ! class_exists( 'flickrRSS' ) ) {
 
 	class flickrRSS {
-	
-		function fixArguments( $args ) {
-			$settings = array();
 		
-			if ( isset( $args[0] ) ) $settings['num_items'] = $args[0];
-		  	if ( isset( $args[1] ) ) $settings['type'] = $args[1];
-		  	if ( isset( $args[2] ) ) $settings['tags'] = $args[2];
-		  	if ( isset( $args[6] ) ) $settings['id'] = $args[6];
-		  	if ( isset( $args[7] ) ) $settings['set'] = $args[7];
-			if ( isset( $args[8] ) ) $settings['do_cache'] = $args[8];
-			if ( isset( $args[9] ) ) $settings['cache_uri'] = $args[9];
-			if ( isset( $args[10] ) ) $settings['cache_path'] = $args[10];
-	
-			$imagesize = $args[3]?$args[3]:"square";
-			$before_image = $args[4]?$args[4]:"";
-			$after_image = $args[5]?$args[5]:"";
-
-			$settings['html'] = $before_image . '<a href="%flickr_page%" title="%title%"><img src="%image_'.$imagesize.'%" alt="%title%" /></a>' . $after_image;
-		
-			return $settings;
-		}
-	
 		function getSettings() {
 			
 			$settings = array(
@@ -247,9 +226,5 @@ add_action( 'plugins_loaded', array( &$flickrRSS, 'setupWidget' ) );
 function get_flickrRSS( $settings ) {
 	global $flickrRSS;
 
-	if ( func_num_args() > 1 ) {
-		$old_array = func_get_args();
-		$flickrRSS->printGallery( $flickrRSS->fixArguments( $old_array ) );
-	}
-	else $flickrRSS->printGallery( $settings );
+	$flickrRSS->printGallery( $settings );
 }

@@ -14,7 +14,7 @@ if ( ! class_exists( 'flickrRSS' ) ) :
 class flickrRSS {
 	
 	function __construct() {
-		add_action( 'admin_menu', 'add_settings_page' );
+		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		// add_action( 'plugins_loaded', 'create_widget' );
 	}
 

@@ -13,6 +13,11 @@ if ( ! class_exists( 'flickrRSS' ) ) :
 
 class flickrRSS {
 	
+	function __construct() {
+		add_action( 'admin_menu', 'add_settings_page' );
+		// add_action( 'plugins_loaded', 'create_widget' );
+	}
+
 	function get_settings() {
 		
 		$settings = array(
@@ -187,8 +192,6 @@ class flickrRSS {
 endif;
 
 $flickrRSS = new flickrRSS();
-add_action( 'admin_menu', array( &$flickrRSS, 'add_settings_page' ) );
-add_action( 'plugins_loaded', array( &$flickrRSS, 'create_widget' ) );
 
 /**
  * Main function to call flickrRSS in your templates

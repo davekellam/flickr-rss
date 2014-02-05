@@ -42,7 +42,7 @@ class flickrRSS {
 			// - %image_small%, %image_square%, %image_thumbnail%, %image_medium%, %image_large%
 			'html' => '<a href="%flickr_page%" title="%title%"><img src="%image_square%" alt="%title%"/></a>',
 			// the default title
-			'default_title' => "Untitled Flickr photo", 
+			'default_title' => '', 
 			// the HTML to print after the list of images
 			'after_list' => ''
 		);
@@ -53,15 +53,16 @@ class flickrRSS {
 
 	function get_rss( $settings ) {
 		// Construct feed URL
-		if ($settings['type'] == "user") { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200'; }
-		elseif ($settings['type'] == "favorite") { $rss_url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200'; }
-		elseif ($settings['type'] == "set") { $rss_url = 'http://api.flickr.com/services/feeds/photoset.gne?set=' . $settings['set'] . '&nsid=' . $settings['id'] . '&format=rss_200'; }
-		elseif ($settings['type'] == "group") { $rss_url = 'http://api.flickr.com/services/feeds/groups_pool.gne?id=' . $settings['id'] . '&format=rss_200'; }
-		elseif ($settings['type'] == "public" || $settings['type'] == "community") { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?tags=' . $settings['tags'] . '&format=rss_200'; }
+		if ( $settings['type'] == 'user' ) { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200'; }
+		elseif ( $settings['type'] == 'favorite' ) { $rss_url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200'; }
+		elseif ( $settings['type'] == 'set' ) { $rss_url = 'http://api.flickr.com/services/feeds/photoset.gne?set=' . $settings['set'] . '&nsid=' . $settings['id'] . '&format=rss_200'; }
+		elseif ( $settings['type'] == 'group' ) { $rss_url = 'http://api.flickr.com/services/feeds/groups_pool.gne?id=' . $settings['id'] . '&format=rss_200'; }
+		elseif ( $settings['type'] == 'public' || $settings['type'] == 'community' ) { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?tags=' . $settings['tags'] . '&format=rss_200'; }
 		else { 
 			print '<strong>No "type" parameter has been setup. Check your flickrRSS Settings page, or provide the parameter as an argument.</strong>';
 			die();
 		}
+
 		// Retrieve feed
 		return fetch_feed( $rss_url );
 	}
@@ -95,33 +96,35 @@ class flickrRSS {
 		# builds html from array
 		foreach ( $items as $item ) {
 		
-			if(!preg_match('<img src="([^"]*)" [^/]*/>', $item->get_description(), $imgUrlMatches)) {
+			if( ! preg_match('<img src="([^"]*)" [^/]*/>', $item->get_description(), $imgUrlMatches) ) {
 				continue;
 			}
-			$baseurl = str_replace("_m.jpg", "", $imgUrlMatches[1]);
+
+			$baseurl = str_replace('_m.jpg', '', $imgUrlMatches[1]);
 			$thumbnails = array(
-				'small' => $baseurl . "_m.jpg",
-				'square' => $baseurl . "_s.jpg",
-				'thumbnail' => $baseurl . "_t.jpg",
-				'medium' => $baseurl . ".jpg",
-				'large' => $baseurl . "_b.jpg"
+				'small' => $baseurl . '_m.jpg',
+				'square' => $baseurl . '_s.jpg',
+				'thumbnail' => $baseurl . '_t.jpg',
+				'medium' => $baseurl . '.jpg',
+				'large' => $baseurl . '_b.jpg'
 			);
+
 			#check if there is an image title (for html validation purposes)
 			if( $item->get_title() !== '' ) 
 				$title = htmlspecialchars(stripslashes( $item->get_title() ) );
 			else 
 				$title = $settings['default_title'];
 			$url = $item->get_permalink();
-			$toprint = stripslashes($settings['html']);
-			$toprint = str_replace("%flickr_page%", $url, $toprint);
-			$toprint = str_replace("%title%", $title, $toprint);
+			$toprint = stripslashes($settings['html'] );
+			$toprint = str_replace( "%flickr_page%", $url, $toprint );
+			$toprint = str_replace( "%title%", $title, $toprint );
 		
 			foreach ( $thumbnails as $size => $thumbnail ) {
 				$toprint = str_replace( "%image_" . $size . "%" , $thumbnail, $toprint );
 			}
 			echo $toprint;
 		}
-		echo stripslashes($settings['after_list']);
+		echo stripslashes( $settings['after_list'] );
 	}
 
 	function add_settings_page() {
@@ -143,7 +146,7 @@ class flickrRSS {
 			$settings['cache_sizes'] = array();
 			
 			foreach ( array("small", "square", "thumbnail", "medium", "large") as $size ) {
-				if ($_POST['flickrRSS_cache_'.$size]) $settings['cache_sizes'][] = $size;
+				if ( $_POST['flickrRSS_cache_'.$size] ) $settings['cache_sizes'][] = $size;
 			}
 			
 			update_option( 'flickrRSS_settings', $settings );

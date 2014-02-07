@@ -22,7 +22,7 @@ class flickrRSS {
 		// add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		// add_action( 'plugins_loaded', 'create_widget' );
 
-		$settings = array(
+		$this->settings = array(
 			/*== Content params ==*/
 			// The type of Flickr images that you want to show. Possible values: 'user', 'favorite', 'set', 'group', 'public'
 			'type' => 'public',
@@ -53,7 +53,7 @@ class flickrRSS {
 	function get_settings() {
 		
 		if ( get_option('flickrRSS_settings') )
-			$settings = array_merge($settings, get_option('flickrRSS_settings'));
+			$settings = array_merge( $this->settings, get_option('flickrRSS_settings') );
 
 		return $settings;
 	}

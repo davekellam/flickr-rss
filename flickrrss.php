@@ -86,40 +86,34 @@ class flickrRSS {
 	}
 
 	function print_gallery( $settings ) {
-	
 		$settings = array_merge( $this->get_settings(), $settings );
 
 		// Get settings
-		$id = $settings['id'];
+		$id        = $settings['id'];
 		$num_items = $settings['num_items'];
-		$set = $settings['set'];
-		$tags = $settings['tags'];
-		$type = $settings['type'];
+		$set       = $settings['set'];
+		$tags      = $settings['tags'];
+		$type      = $settings['type'];
 
 		// fetch RSS feed
 		$rss = $this->get_rss( $type, $id, $tags, $set );		
 
 		if ( ! is_wp_error( $rss ) ) {
-
 			$maxitems = $rss->get_item_quantity( $num_items ); 
 
 			// Build an array of all the items, starting with element 0 (first element).
 			$items = $rss->get_items( 0, $maxitems );
-
 		} else {
-
 			echo $rss->get_error_message();
 			return;
-
 		}
 
-		// TODO: Construct object for output rather than echoing and store in transient
-		$html = esc_html( $settings['before_list'] );
+		// Start constructing HTML output
+		$html = stripslashes( $settings['before_list'] );
 
-		# builds html from array
 		foreach ( $items as $item ) {
 		
-			if( ! preg_match('<img src="([^"]*)" [^/]*/>', $item->get_description(), $imgUrlMatches) ) {
+			if ( ! preg_match('<img src="([^"]*)" [^/]*/>', $item->get_description(), $imgUrlMatches) ) {
 				continue;
 			}
 
@@ -133,12 +127,15 @@ class flickrRSS {
 			);
 
 			#check if there is an image title (for html validation purposes)
-			if( $item->get_title() !== '' ) 
+			if( $item->get_title() !== '' ) {
 				$title = htmlspecialchars(stripslashes( $item->get_title() ) );
-			else 
+			} else  {
 				$title = $settings['default_title'];
+			}
+
 			$url = $item->get_permalink();
-			$toprint = stripslashes($settings['html'] );
+
+			$toprint = stripslashes( $settings['html'] );
 			$toprint = str_replace( "%flickr_page%", $url, $toprint );
 			$toprint = str_replace( "%title%", $title, $toprint );
 		
@@ -147,7 +144,7 @@ class flickrRSS {
 			}
 			$html .= $toprint;
 		}
-		$html .= esc_html( $settings['after_list'] );
+		$html .= stripslashes( $settings['after_list'] );
 
 		echo $html;
 	}

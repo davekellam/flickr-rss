@@ -51,7 +51,7 @@ class flickrRSS {
 	}
 
 	function get_settings() {
-		
+
 		if ( get_option('flickrRSS_settings') )
 			$settings = array_merge( $this->settings, get_option('flickrRSS_settings') );
 
@@ -59,12 +59,7 @@ class flickrRSS {
 	}
 
 	
-	function get_rss( $settings ) {
-		
-		$type = $settings['type'];
-		$id = $settings['id'];
-		$tags = $settings['tags'];
-		$set = $settings['set'];
+	function get_rss( $type, $id, $tags, $set ) {
 
 		// Construct feed URL
 		if ( $type == 'user' ) 
@@ -92,34 +87,34 @@ class flickrRSS {
 
 	function print_gallery( $settings ) {
 	
-		if ( ! is_array( $settings ) ) {
-			return; // probably need better error stuff here
-		}
-	
 		$settings = array_merge( $this->get_settings(), $settings );
 
-		// fetch RSS feed
-		$rss = $this->get_rss( $settings );
-
-		if ( is_wp_error( $rss ) ) {
-   			echo $rss->get_error_message();
-   			return;
-		}
-
-		// specifies number of pictures
+		// Get settings
+		$id = $settings['id'];
 		$num_items = $settings['num_items'];
+		$set = $settings['set'];
+		$tags = $settings['tags'];
+		$type = $settings['type'];
 
-		if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
+		// fetch RSS feed
+		$rss = $this->get_rss( $type, $id, $tags, $set );		
+
+		if ( ! is_wp_error( $rss ) ) {
 
 			$maxitems = $rss->get_item_quantity( $num_items ); 
 
 			// Build an array of all the items, starting with element 0 (first element).
-		 	$items = $rss->get_items( 0, $maxitems );
+			$items = $rss->get_items( 0, $maxitems );
 
-		endif;
+		} else {
+
+			echo $rss->get_error_message();
+			return;
+
+		}
 
 		// TODO: Construct object for output rather than echoing and store in transient
-		echo stripslashes( $settings['before_list'] );
+		$html = esc_html( $settings['before_list'] );
 
 		# builds html from array
 		foreach ( $items as $item ) {
@@ -150,9 +145,11 @@ class flickrRSS {
 			foreach ( $thumbnails as $size => $thumbnail ) {
 				$toprint = str_replace( "%image_" . $size . "%" , $thumbnail, $toprint );
 			}
-			echo $toprint;
+			$html .= $toprint;
 		}
-		echo stripslashes( $settings['after_list'] );
+		$html .= esc_html( $settings['after_list'] );
+
+		echo $html;
 	}
 }
 

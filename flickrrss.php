@@ -11,10 +11,15 @@ Author URI: http://eightface.com
 
 if ( ! class_exists( 'flickrRSS' ) ) :
 
+define( 'FLICKRRSS_PATH', dirname( __FILE__ ) );
+
+require_once( FLICKRRSS_PATH . '/flickrrss-settings.php' );
+// require_once( FLICKRRSS_PATH . '/flickrrss-widget.php' );
+
 class flickrRSS {
 	
 	function __construct() {
-		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+		// add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		// add_action( 'plugins_loaded', 'create_widget' );
 	}
 
@@ -46,8 +51,10 @@ class flickrRSS {
 			// the HTML to print after the list of images
 			'after_list' => ''
 		);
-		if (get_option('flickrRSS_settings'))
+		
+		if ( get_option('flickrRSS_settings') )
 			$settings = array_merge($settings, get_option('flickrRSS_settings'));
+
 		return $settings;
 	}
 
@@ -125,43 +132,6 @@ class flickrRSS {
 			echo $toprint;
 		}
 		echo stripslashes( $settings['after_list'] );
-	}
-
-	function add_settings_page() {
-		if ( function_exists( 'add_options_page') ) {
-			add_options_page( 'flickrRSS Settings', 'flickrRSS', 'manage_options', 'flickrrss-admin.php', array( &$this, 'create_settings_page' ) );
-		}
-	}
-
-	function create_settings_page() {
-		
-		$settings = $this->get_settings();
-
-		if ( isset( $_POST['save_flickrRSS_settings'] ) ) {
-			
-			foreach ( $settings as $name => $value ) {
-				$settings[$name] = $_POST['flickrRSS_'.$name];
-			}
-
-			$settings['cache_sizes'] = array();
-			
-			foreach ( array("small", "square", "thumbnail", "medium", "large") as $size ) {
-				if ( $_POST['flickrRSS_cache_'.$size] ) $settings['cache_sizes'][] = $size;
-			}
-			
-			update_option( 'flickrRSS_settings', $settings );
-			
-			echo '<div class="updated"><p>flickrRSS settings saved!</p></div>';
-		}
-
-		if ( isset( $_POST['reset_flickrRSS_settings'] ) ) {
-			delete_option( 'flickrRSS_settings' );
-			echo '<div class="updated"><p>flickrRSS settings restored to default!</p></div>';
-		}
-
-		// add setting page 
-		include ( 'flickrrss-admin.php' );
-
 	}
 }
 

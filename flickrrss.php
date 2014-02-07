@@ -21,10 +21,7 @@ class flickrRSS {
 	function __construct() {
 		// add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		// add_action( 'plugins_loaded', 'create_widget' );
-	}
 
-	function get_settings() {
-		
 		$settings = array(
 			/*== Content params ==*/
 			// The type of Flickr images that you want to show. Possible values: 'user', 'favorite', 'set', 'group', 'public'
@@ -51,6 +48,9 @@ class flickrRSS {
 			// the HTML to print after the list of images
 			'after_list' => ''
 		);
+	}
+
+	function get_settings() {
 		
 		if ( get_option('flickrRSS_settings') )
 			$settings = array_merge($settings, get_option('flickrRSS_settings'));
@@ -58,20 +58,36 @@ class flickrRSS {
 		return $settings;
 	}
 
+	
 	function get_rss( $settings ) {
+		
+		$type = $settings['type'];
+		$id = $settings['id'];
+		$tags = $settings['tags'];
+		$set = $settings['set'];
+
 		// Construct feed URL
-		if ( $settings['type'] == 'user' ) { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200'; }
-		elseif ( $settings['type'] == 'favorite' ) { $rss_url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200'; }
-		elseif ( $settings['type'] == 'set' ) { $rss_url = 'http://api.flickr.com/services/feeds/photoset.gne?set=' . $settings['set'] . '&nsid=' . $settings['id'] . '&format=rss_200'; }
-		elseif ( $settings['type'] == 'group' ) { $rss_url = 'http://api.flickr.com/services/feeds/groups_pool.gne?id=' . $settings['id'] . '&format=rss_200'; }
-		elseif ( $settings['type'] == 'public' || $settings['type'] == 'community' ) { $rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?tags=' . $settings['tags'] . '&format=rss_200'; }
+		if ( $type == 'user' ) 
+			$url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $id . '&tags=' . $tags . '&format=rss_200';
+		
+		elseif ( $type == 'favorite' )
+			$url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $id . '&format=rss_200';
+		
+		elseif ( $type == 'set' ) 
+			$url = 'http://api.flickr.com/services/feeds/photoset.gne?set=' . $set . '&nsid=' . $id . '&format=rss_200';
+		
+		elseif ( $type == 'group' ) 
+			$url = 'http://api.flickr.com/services/feeds/groups_pool.gne?id=' . $id . '&format=rss_200';
+		
+		elseif ( $type == 'public' || $type == 'community' )
+			$url = 'http://api.flickr.com/services/feeds/photos_public.gne?tags=' . $tags . '&format=rss_200';
+		
 		else { 
-			print '<strong>No "type" parameter has been setup. Check your flickrRSS Settings page, or provide the parameter as an argument.</strong>';
-			die();
+			return new WP_Error( 'feed_settings_error', __( "FlickrRSS has a configuration problem" ) );
 		}
 
 		// Retrieve feed
-		return fetch_feed( $rss_url );
+		return fetch_feed( $url );
 	}
 
 	function print_gallery( $settings ) {
@@ -84,6 +100,11 @@ class flickrRSS {
 
 		// fetch RSS feed
 		$rss = $this->get_rss( $settings );
+
+		if ( is_wp_error( $rss ) ) {
+   			echo $rss->get_error_message();
+   			return;
+		}
 
 		// specifies number of pictures
 		$num_items = $settings['num_items'];

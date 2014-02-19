@@ -1,6 +1,6 @@
 <?php
 
-class SampleTest extends WP_UnitTestCase {
+class FlickrRssTest extends WP_UnitTestCase {
 
 	function testSample() {
 		// replace this with some actual testing code

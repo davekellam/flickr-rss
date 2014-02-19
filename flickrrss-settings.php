@@ -63,7 +63,7 @@ class FlickrrssSettings {
 
 		add_settings_section(
 			'flickrrss-display', // ID
-			'My Custom Settings', // Title
+			'Display Settings', // Title
 			array( $this, 'print_section_info' ), // Callback
 			'flickrrss-admin' // Page
 		);
@@ -92,14 +92,21 @@ class FlickrrssSettings {
 			'flickrrss-display',
 			array (
 	            //'label_for'   => 'label2', // makes the field name clickable,
-	            'name'        => 'num_items_x', // value for 'name' attribute
-	            //'value'       => esc_attr( $data['color'] ),
+	            'name' => 'num_images', // value for 'name' attribute
+	            //'value' => esc_attr( $data['color'] ),
 	            'options'     => array (
-	                '1'  => '1',
-	                '2'   => '2',
-	                '3' => '3'
+	                '1' => '1',
+	                '2' => '2',
+	                '3' => '3',
+	                '4' => '4',
+	                '5' => '5',
+	                '6' => '6',
+	                '7' => '7',
+	                '8' => '8',
+	                '9' => '9',
+	                '10' => '10',
 	            ),
-	            //'option_name' => $option_name
+	            'option_name' => 'num_images'
 	        )
 		);
 	}
@@ -117,6 +124,9 @@ class FlickrrssSettings {
 		if( isset( $input['title'] ) )
 			$new_input['title'] = sanitize_text_field( $input['title'] );
 
+		if( isset( $input['num_items'] ) )
+			$new_input['num_items'] = absint( $input['num_items'] );
+
 		return $new_input;
 	}
 
@@ -124,7 +134,7 @@ class FlickrrssSettings {
 	 * Print the Section text
 	 */
 	public function print_section_info() {
-		print 'Enter your settings below:';
+		// print 'Enter your settings below:';
 	}
 
 	/** 
@@ -150,18 +160,19 @@ class FlickrrssSettings {
 	/**
 	 * Get the number of images that should appear
 	 */
-	public function num_images_callback() {
+	public function num_images_callback( array $args) {
 
-		$num_items = isset( $this->options['num_items'] ) ? esc_attr( $this->options['num_items']) : '';
+		$num_items = isset( $this->options['num_items'] ) ? esc_attr( $this->options['num_items'] ) : '1';
+		$dropdown_vals = $args['options'];
 
 		$html = '<select name="flickrrss-settings[num_items]" id="num_items">';
 		
-		for ( $counter = 1; $counter <= 20; $counter++ ) { 
+		foreach ( $dropdown_vals as $value => $name ) { 
 			$html .= '<option '; 
 			
-			$html .= isset( $this->options['num_items'] ) ? selected( $this->options['num_items'], $counter, false ) : '';
+			$html .= isset( $num_items ) ? selected( $num_items, $value, false ) : '';
 
-			$html .= 'value=' . $counter . '>' . $counter;
+			$html .= 'value=' . $value . '>' . $name;
 			$html .= '</option>';	
 		}
 
@@ -171,5 +182,5 @@ class FlickrrssSettings {
 	}
 }
 
-if( is_admin() )
+if ( is_admin() && ! is_multisite() )
 	$my_settings_page = new FlickrrssSettings();

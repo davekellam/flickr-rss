@@ -110,15 +110,15 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 		function getRSS( $settings ) {
 			// Construct feed URL
 			if ( $settings['type'] == "user" ) {
-				$rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200';
+				$rss_url = 'https://api.flickr.com/services/feeds/photos_public.gne?id=' . $settings['id'] . '&tags=' . $settings['tags'] . '&format=rss_200';
 			} elseif ( $settings['type'] == "favorite" ) {
-				$rss_url = 'http://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200';
+				$rss_url = 'https://api.flickr.com/services/feeds/photos_faves.gne?id=' . $settings['id'] . '&format=rss_200';
 			} elseif ( $settings['type'] == "set" ) {
-				$rss_url = 'http://api.flickr.com/services/feeds/photoset.gne?set=' . $settings['set'] . '&nsid=' . $settings['id'] . '&format=rss_200';
+				$rss_url = 'https://api.flickr.com/services/feeds/photoset.gne?set=' . $settings['set'] . '&nsid=' . $settings['id'] . '&format=rss_200';
 			} elseif ( $settings['type'] == "group" ) {
-				$rss_url = 'http://api.flickr.com/services/feeds/groups_pool.gne?id=' . $settings['id'] . '&format=rss_200';
+				$rss_url = 'https://api.flickr.com/services/feeds/groups_pool.gne?id=' . $settings['id'] . '&format=rss_200';
 			} elseif ( $settings['type'] == "public" || $settings['type'] == "community" ) {
-				$rss_url = 'http://api.flickr.com/services/feeds/photos_public.gne?tags=' . $settings['tags'] . '&format=rss_200';
+				$rss_url = 'https://api.flickr.com/services/feeds/photos_public.gne?tags=' . $settings['tags'] . '&format=rss_200';
 			} else {
 				print '<strong>No "type" parameter has been setup. Check your flickrRSS Settings page, or provide the parameter as an argument.</strong>';
 				die();
@@ -138,12 +138,15 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 			if ( ! ( $rss = $this->getRSS( $settings ) ) ) {
 				return;
 			}
+
+			//var_dump( $rss );
 			# specifies number of pictures
-			$items = array_slice( $rss->items, 0, $settings['num_items'] );
+			$items = $rss->get_items( 0, $settings['num_items'] );
 			echo stripslashes( $settings['before_list'] );
 			# builds html from array
 			foreach ( $items as $item ) {
-				if ( ! preg_match( '<img src="([^"]*)" [^/]*/>', $item['description'], $imgUrlMatches ) ) {
+
+				if ( ! preg_match( '<img src="([^"]*)" [^/]*/>', $item->get_content(), $imgUrlMatches ) ) {
 					continue;
 				}
 				$baseurl    = str_replace( "_m.jpg", "", $imgUrlMatches[1] );
@@ -155,12 +158,12 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 					'large'     => $baseurl . "_b.jpg"
 				);
 				#check if there is an image title (for html validation purposes)
-				if ( $item['title'] !== "" ) {
-					$title = htmlspecialchars( stripslashes( $item['title'] ) );
+				if ( $item->get_title() !== "" ) {
+					$title = htmlspecialchars( stripslashes( $item->get_title() ) );
 				} else {
 					$title = $settings['default_title'];
 				}
-				$url     = $item['link'];
+				$url     = $item->get_link();
 				$toprint = stripslashes( $settings['html'] );
 				$toprint = str_replace( "%flickr_page%", $url, $toprint );
 				$toprint = str_replace( "%title%", $title, $toprint );

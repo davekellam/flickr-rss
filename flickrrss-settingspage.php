@@ -47,12 +47,14 @@
 			<tr valign="top" id="set">
 				<th scope="row">Set ID</th>
 				<td>
-					<input name="flickrRSS_set" type="text" id="flickrRSS_set" value="<?php echo $settings['set']; ?>" size="40" /> Use number from the set url</p>
+					<input name="flickrRSS_set" type="text" id="flickrRSS_set" value="<?php echo $settings['set']; ?>" size="40" /> Use number from the set url
+				</td>
 			</tr>
 			<tr valign="top" id="tags">
 				<th scope="row">Tags (optional)</th>
 				<td>
-					<input name="flickrRSS_tags" type="text" id="flickrRSS_tags" value="<?php echo $settings['tags']; ?>" size="40" /> Comma separated, no spaces</p>
+					<input name="flickrRSS_tags" type="text" id="flickrRSS_tags" value="<?php echo $settings['tags']; ?>" size="40" /> Comma separated, no spaces
+				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row">HTML Builder</th>

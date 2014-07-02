@@ -2,8 +2,8 @@
 Contributors: eightface
 Tags: flickr, photos, images, sidebar, widget
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 6.0
+Tested up to: 3.9
+Stable tag: 5.3
 
 Allows you to integrate Flickr photos into your site. It supports user, set, favorite, group and community photostreams.
 

@@ -80,9 +80,9 @@ This would show the 20 most recent thumbnail sized photos from the specified use
 
 == Plugin History ==
 
-**Latest Release:** January 30, 2014
+**Latest Release:** July 1, 2014
 
-* 6.0 - Primary development on GitHub, see repo there for details. Removing old functionality and revamping plugin.
+* 5.3 - Fixed feed urls to use https://, some fixes to deprecated functions and errors
 * 5.2 - Fixed image cache server name change, also had a nested function for some reason which was messing up multiple instances for people
 * 5.1 - Minor interface tweaks to avoid confusion
 * 5.0 - Added more customization of presentation logic, separated core code from display, improved paramter system, many other changes, thanks to Stefano Verna for major code updates.

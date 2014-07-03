@@ -181,7 +181,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 						strpos( $settings['html'], "%image_" . $size . "%" )
 					) {
 						$img_to_cache = $thumbnail;
-						preg_match( '<http://farm[0-9]{0,3}\.static.?flickr\.com/\d+?\/([^.]*)\.jpg>', $img_to_cache, $flickrSlugMatches );
+						preg_match( '<https?://farm[0-9]{0,3}\.static.?flickr\.com/\d+?\/([^.]*)\.jpg>', $img_to_cache, $flickrSlugMatches );
 						$flickrSlug = $flickrSlugMatches[1];
 						if ( ! file_exists( "$fullPath$flickrSlug.jpg" ) ) {
 							$localimage  = fopen( "$fullPath$flickrSlug.jpg", 'wb' );

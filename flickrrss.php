@@ -13,7 +13,7 @@ if ( ! class_exists( 'flickrRSS' ) ) {
 	class flickrRSS {
 
 		function flickrRSS() {
-			$this->version = "6.0";
+			$this->version = "5.3.1";
 		}
 
 		function setupActivation() {

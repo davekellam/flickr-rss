@@ -3,7 +3,7 @@ Contributors: eightface
 Tags: flickr, photos, images, sidebar, widget
 Requires at least: 3.5
 Tested up to: 3.9
-Stable tag: 5.3
+Stable tag: 5.3.1
 
 Allows you to integrate Flickr photos into your site. It supports user, set, favorite, group and community photostreams.
 
@@ -80,8 +80,9 @@ This would show the 20 most recent thumbnail sized photos from the specified use
 
 == Plugin History ==
 
-**Latest Release:** July 1, 2014
+**Latest Release:** July 3, 2014
 
+* 5.3.1 - Updated cache to work with https urls, props ManxStef
 * 5.3 - Fixed feed urls to use https://, some fixes to deprecated functions and errors
 * 5.2 - Fixed image cache server name change, also had a nested function for some reason which was messing up multiple instances for people
 * 5.1 - Minor interface tweaks to avoid confusion

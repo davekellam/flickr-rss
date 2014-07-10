@@ -3,7 +3,7 @@
 Plugin Name: flickrRSS
 Plugin URI: http://wordpress.org/extend/plugins/flickr-rss/
 Description: Allows you to easily integrate Flickr photos into your site's templates.
-Version: 5.3
+Version: 5.3.1
 License: GPL
 Author: Dave Kellam
 Author URI: http://davekellam.com
